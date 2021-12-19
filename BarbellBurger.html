@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Barbell reaction</title>
+    <link rel="icon" type="image/x-icon" href="./img/favicon.ico" />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./css/customBarbell.css" />
+  </head>
+
+  <body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+      class BarbellBurger extends React.Component {
+        state = {
+          burger: [
+            { type: 'salad', amount: 0, price: 10 },
+            { type: 'cheese', amount: 0, price: 20 },
+            { type: 'beef', amount: 0, price: 55 },
+          ],
+        };
+
+        changeAmount(burger, index, increase) {
+          if (!increase) {
+            burger[index].amount--;
+          } else {
+            burger[index].amount++;
+          }
+          this.setState({
+            burger,
+          });
+        }
+
+        render() {
+          let burger = this.state.burger;
+          return (
+            <div className="container">
+              <h1 className="text-center">Barbell Burger DEMO</h1>
+              <div className="row">
+                <div className="col-12 col-lg-7">
+                  <h2 className="text-center">Current Burger</h2>
+                  <div className="breadTop"></div>
+                  {burger.map(({ type, amount }) => {
+                    let midBurger = [];
+                    for (let index = 0; index < amount; index++) {
+                      midBurger.push(
+                        <div key={type + index} className={type}></div>
+                      );
+                    }
+                    return midBurger;
+                  })}
+                  <div className="breadBottom"></div>
+                </div>
+                <div className="col-12 col-lg-5">
+                  <h2 className="text-center">Order</h2>
+                  <table className="table">
+                    <thead>
+                      <tr>
+                        <th>Type</th>
+                        <th>Amount</th>
+                        <th>Price</th>
+                        <th>Total</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {burger.map(
+                        ({ type, amount, price }, index) => {
+                          return (
+                            <tr key={index}>
+                              <td className="text-capitalize">{type}</td>
+                              <td>
+                                <button
+                                  className="btn btn-success mr-2"
+                                  onClick={() => {
+                                    this.changeAmount(burger ,index, true);
+                                  }}
+                                >
+                                  +
+                                </button>
+                                {amount}
+                                {amount === 0 ? null : (
+                                  <button
+                                    className="btn btn-danger ml-2"
+                                    onClick={() => {
+                                      this.changeAmount(burger ,index, false);
+                                    }}
+                                  >
+                                    -
+                                  </button>
+                                )}
+                              </td>
+                              <td>{price}</td>
+                              <td>{amount * price}</td>
+                            </tr>
+                          );
+                        }
+                      )}
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colSpan="2"></td>
+                        <td>Sum</td>
+                        <td>
+                          {burger.reduce(
+                            (prev, { amount, price }) => {
+                              return (prev += amount * price);
+                            },
+                            0
+                          )}
+                        </td>
+                      </tr>
+                    </tfoot>
+                  </table>
+                </div>
+              </div>
+            </div>
+          );
+        }
+      }
+
+      ReactDOM.render(<BarbellBurger />, document.getElementById('root'));
+    </script>
+
+    <script src="./js/bootstrap.min.js"></script>
+
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+  </body>
+</html>
